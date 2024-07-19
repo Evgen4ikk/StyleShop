@@ -5,10 +5,6 @@ export class CreateSubcategoryDto {
   @IsNotEmpty()
   name: string
 
-  @IsOptional()
-  @IsString()
-  image?: string
-
   @IsInt()
   @IsNotEmpty()
   categoryId: number
@@ -19,10 +15,6 @@ export class UpdateSubcategoryDto {
   @IsNotEmpty({ message: 'Имя подкатегории не может быть пустым' })
   @IsString({ message: 'Имя подкатегории должно быть строкой' })
   name?: string
-
-  @IsOptional()
-  @IsString()
-  image?: string
 
   @IsInt()
   @IsOptional()

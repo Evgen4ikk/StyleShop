@@ -4,9 +4,7 @@ import type { VariantProps } from 'class-variance-authority'
 import { cva } from 'class-variance-authority'
 import clsx from 'clsx'
 
-interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonStyles> {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonStyles> {
   className?: string
   disabled?: boolean
   fullWidth?: boolean
@@ -36,23 +34,12 @@ const buttonStyles = cva(
 )
 
 export const Button = memo((props: ButtonProps) => {
-  const {
-    className,
-    children,
-    theme,
-    size,
-    fullWidth,
-    disabled,
-    ...otherProps
-  } = props
+  const { className, children, theme, size, fullWidth, disabled, ...otherProps } = props
 
   return (
     <button
       type='button'
-      className={clsx(
-        buttonStyles({ theme, size, fullWidth, disabled }),
-        className
-      )}
+      className={clsx(buttonStyles({ theme, size, fullWidth, disabled }), className)}
       disabled={disabled}
       {...otherProps}
     >

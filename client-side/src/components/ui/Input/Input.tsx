@@ -2,10 +2,7 @@ import type { ForwardRefRenderFunction, InputHTMLAttributes } from 'react'
 import React, { forwardRef, memo } from 'react'
 import clsx from 'clsx'
 
-type HTMLInputProps = Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  'value' | 'onChange' | 'readOnly' | 'size'
->
+type HTMLInputProps = Omit<InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'readOnly' | 'size'>
 
 interface InputProps extends HTMLInputProps {
   className?: string
@@ -15,10 +12,7 @@ interface InputProps extends HTMLInputProps {
   readonly?: boolean
 }
 
-const InputComponent: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (
-  props,
-  ref
-) => {
+const InputComponent: ForwardRefRenderFunction<HTMLInputElement, InputProps> = (props, ref) => {
   const {
     className,
     value = '',

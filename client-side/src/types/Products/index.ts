@@ -8,9 +8,10 @@ export type Product = {
   updatedAt: string
 
   name: string
+  slug: string
   price: number
   description: string
-  images?: string[]
+  images: string[]
   stock: number
   category: Category
   categoryId: number

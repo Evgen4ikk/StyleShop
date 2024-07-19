@@ -3,7 +3,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
+import { Prisma } from '@prisma/client'
 import { PrismaService } from 'src/prisma.service'
+import { generateSlug } from 'src/utils/generate-slug'
 import { CreateProductDto, UpdateProductDto } from './dto/product.dto'
 
 @Injectable()
@@ -17,6 +19,7 @@ export class ProductService {
       description,
       images,
       stock,
+      isBestseller,
       categoryId,
       subcategoryId,
     } = data
@@ -42,10 +45,12 @@ export class ProductService {
     return this.prisma.product.create({
       data: {
         name,
+        slug: generateSlug(name),
         price,
         description,
         images,
         stock,
+        isBestseller,
         category: { connect: { id: categoryId } },
         subcategory: { connect: { id: subcategoryId } },
       },
@@ -53,23 +58,78 @@ export class ProductService {
     })
   }
 
-  async getProducts() {
-    return this.prisma.product.findMany({
-      include: { category: true, subcategory: true },
-    })
-  }
+  async getProducts(params: {
+    bestseller?: boolean
+    categoryId?: number
+    subcategoryId?: number
+    id?: number
+    slug?: string
+    categorySlug?: string
+  }) {
+    const { bestseller, categoryId, subcategoryId, id, slug, categorySlug } =
+      params
 
-  async getProductById(id: number) {
-    const product = await this.prisma.product.findUnique({
-      where: { id },
-      include: { category: true, subcategory: true },
-    })
+    if (id) {
+      const product = await this.prisma.product.findUnique({
+        where: { id },
+        include: { category: true, subcategory: true },
+      })
 
-    if (!product) {
-      throw new NotFoundException(`Продукт с ID ${id} не найден`)
+      if (!product) {
+        throw new NotFoundException(`Продукт с ID ${id} не найден`)
+      }
+
+      return product
     }
 
-    return product
+    if (slug) {
+      const product = await this.prisma.product.findUnique({
+        where: { slug },
+        include: { category: true, subcategory: true },
+      })
+
+      if (!product) {
+        throw new NotFoundException(`Продукт с slug ${slug} не найден`)
+      }
+
+      return product
+    }
+
+    if (categorySlug) {
+      const category = await this.prisma.category.findUnique({
+        where: { slug: categorySlug },
+        include: {
+          Products: {
+            include: { category: true, subcategory: true },
+          },
+        },
+      })
+
+      if (!category) {
+        throw new NotFoundException(
+          `Категория с slug ${categorySlug} не найдена`,
+        )
+      }
+
+      return category.Products
+    }
+
+    const where: Prisma.ProductWhereInput = {}
+
+    if (bestseller !== undefined) {
+      where.isBestseller = bestseller
+    }
+    if (categoryId) {
+      where.categoryId = categoryId
+    }
+    if (subcategoryId) {
+      where.subcategoryId = subcategoryId
+    }
+
+    return this.prisma.product.findMany({
+      where,
+      include: { category: true, subcategory: true },
+    })
   }
 
   async updateProduct(id: number, data: UpdateProductDto) {
@@ -79,6 +139,7 @@ export class ProductService {
       description,
       images,
       stock,
+      isBestseller,
       categoryId,
       subcategoryId,
     } = data
@@ -131,6 +192,7 @@ export class ProductService {
         description,
         images,
         stock,
+        isBestseller,
         category: categoryId ? { connect: { id: categoryId } } : undefined,
         subcategory: subcategoryId
           ? { connect: { id: subcategoryId } }

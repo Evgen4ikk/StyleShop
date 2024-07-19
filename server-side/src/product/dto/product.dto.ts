@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -10,6 +11,10 @@ export class CreateProductDto {
   @IsNotEmpty({ message: 'Имя продукта не может быть пустым' })
   @IsString({ message: 'Имя продукта должно быть строкой' })
   name: string
+
+  @IsOptional()
+  @IsString()
+  slug: string
 
   @IsNotEmpty({ message: 'Цена продукта не может быть пустой' })
   @IsNumber({}, { message: 'Цена продукта должна быть числом' })
@@ -28,6 +33,10 @@ export class CreateProductDto {
   @IsNumber({}, { message: 'Количество на складе должно быть числом' })
   @Min(0, { message: 'Количество на складе должно быть больше или равно нулю' })
   stock: number
+
+  @IsBoolean()
+  @IsOptional()
+  isBestseller: boolean
 
   @IsNotEmpty({ message: 'ID категории не может быть пустым' })
   @IsNumber({}, { message: 'ID категории должен быть числом' })
@@ -60,6 +69,10 @@ export class UpdateProductDto {
   @IsNumber({}, { message: 'Количество на складе должно быть числом' })
   @Min(0, { message: 'Количество на складе должно быть больше или равно нулю' })
   stock?: number
+
+  @IsBoolean()
+  @IsOptional()
+  isBestseller: boolean
 
   @IsOptional()
   @IsNumber({}, { message: 'ID категории должен быть числом' })

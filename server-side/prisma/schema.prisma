@@ -26,7 +26,7 @@ model Category {
   updatedAt DateTime  @updatedAt @map("updated_at")
 
   name      String    @unique
-  image     String?
+  slug      String?   @unique
 
   Subcategories Subcategory[]
   Products   Product[]
@@ -38,7 +38,6 @@ model Subcategory {
   updatedAt DateTime  @updatedAt @map("updated_at")
 
   name      String    @unique
-  image     String?
   category  Category  @relation(fields: [categoryId], references: [id])
   categoryId Int
 
@@ -51,10 +50,13 @@ model Product {
   updatedAt    DateTime    @updatedAt @map("updated_at")
 
   name         String
+  slug         String?     @unique
   price        Float
   description  String?
   images     String[] 
   stock        Int
+
+  isBestseller  Boolean
   category     Category    @relation(fields: [categoryId], references: [id])
   categoryId   Int
   subcategory  Subcategory @relation(fields: [subcategoryId], references: [id])

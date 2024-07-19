@@ -6,6 +6,7 @@ export type Category = {
   createdAt: string
   updatedAt: string
   name: string
+  slug: string
   image: string
   Subcategories: Subcategory[]
   Products: Product[]

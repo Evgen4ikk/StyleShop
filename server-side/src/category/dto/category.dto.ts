@@ -4,10 +4,6 @@ export class CreateCategoryDto {
   @IsString()
   @IsNotEmpty()
   name: string
-
-  @IsOptional()
-  @IsString()
-  image?: string
 }
 
 export class UpdateCategoryDto {
@@ -15,8 +11,4 @@ export class UpdateCategoryDto {
   @IsNotEmpty({ message: 'Имя категории не может быть пустым' })
   @IsString({ message: 'Имя категории должно быть строкой' })
   name?: string
-
-  @IsOptional()
-  @IsString()
-  image?: string
 }
