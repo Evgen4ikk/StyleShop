@@ -43,15 +43,12 @@ export class SubcategoryService {
   }
 
   async getSubcategories() {
-    return this.prisma.subcategory.findMany({
-      include: { Products: true },
-    })
+    return this.prisma.subcategory.findMany()
   }
 
   async getSubcategoryById(id: number) {
     const subcategory = await this.prisma.subcategory.findUnique({
       where: { id },
-      include: { Products: true },
     })
 
     if (!subcategory) {
@@ -59,6 +56,20 @@ export class SubcategoryService {
     }
 
     return subcategory
+  }
+
+  async getSubcategoryByCategorySlug(categorySlug: string) {
+    const category = await this.prisma.category.findUnique({
+      where: { slug: categorySlug },
+    })
+
+    if (!category) {
+      throw new NotFoundException(`Категория с slug ${categorySlug} не найдена`)
+    }
+
+    return this.prisma.subcategory.findMany({
+      where: { categoryId: category.id },
+    })
   }
 
   async updateSubcategory(id: number, dto: UpdateSubcategoryDto) {

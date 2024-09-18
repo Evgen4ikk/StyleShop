@@ -2,9 +2,8 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { Header } from '@/components/Layout/Header'
+import { Main } from '@/components/Layout/Main'
 import { TanStackQueryProvider } from '@/components/providers'
-
-import { Main } from '../components/Layout/Main'
 
 import '../assets/globals.css'
 

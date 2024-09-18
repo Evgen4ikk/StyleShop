@@ -13,7 +13,7 @@ const CatalogIdPage = () => {
   const [productsById, setProductsById] = useState<Product[]>([])
 
   const getProducts = async () => {
-    const data = await getAllProducts({ subcategoryId: params.id, categorySlug: params.slug })
+    const data = await getAllProducts({ subcategoryId: params.id })
     setProductsById(data)
   }
 
@@ -21,13 +21,9 @@ const CatalogIdPage = () => {
     getProducts()
   }, [])
 
-  if (productsById.length === 0) return <div>No products found</div>
-
   return (
     <div>
-      <Typography variant='typography20_medium'>
-        {productsById[0]?.subcategory?.name || 'Subcategory not found'}
-      </Typography>
+      <Typography variant='typography20_medium'>ПОДКАТЕГОРИЯ</Typography>
       {productsById.map((product) => (
         <div key={product.id}>
           <Typography variant='typography20_medium'>{product.name}</Typography>

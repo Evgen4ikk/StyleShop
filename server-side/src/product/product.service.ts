@@ -24,6 +24,10 @@ export class ProductService {
       subcategoryId,
     } = data
 
+    if (!categoryId) {
+      throw new ConflictException('Отсутствует ID категории')
+    }
+
     const existingCategory = await this.prisma.category.findUnique({
       where: { id: categoryId },
     })
@@ -119,17 +123,26 @@ export class ProductService {
     if (bestseller !== undefined) {
       where.isBestseller = bestseller
     }
+
+    // Фильтр по категории
     if (categoryId) {
       where.categoryId = categoryId
     }
+
     if (subcategoryId) {
       where.subcategoryId = subcategoryId
     }
 
-    return this.prisma.product.findMany({
+    const products = await this.prisma.product.findMany({
       where,
       include: { category: true, subcategory: true },
     })
+
+    if (products.length === 0) {
+      throw new NotFoundException(`Продукты не найдены по указанным параметрам`)
+    }
+
+    return products
   }
 
   async updateProduct(id: number, data: UpdateProductDto) {

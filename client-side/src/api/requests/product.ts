@@ -1,4 +1,4 @@
-import { api } from '@/api/api'
+import { api } from '@/api/instance'
 import type { Product } from '@/types/Products'
 
 interface GetProductsParams {
@@ -11,6 +11,6 @@ interface GetProductsParams {
 }
 
 export const getAllProducts = async (params: GetProductsParams = {}): Promise<Product[]> => {
-  const { data } = await api.get<Product[]>('/products', { params })
-  return data
+  const response = await api.get<Product[]>('/products', { params })
+  return response.data
 }

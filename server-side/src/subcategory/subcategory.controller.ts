@@ -26,6 +26,11 @@ export class SubcategoryController {
     return this.subcategoryService.getSubcategoryById(+id)
   }
 
+  @Get('category/:slug')
+  findByCategoryId(@Param('slug') slug: string) {
+    return this.subcategoryService.getSubcategoryByCategorySlug(slug)
+  }
+
   @Put(':id')
   @Auth()
   update(
